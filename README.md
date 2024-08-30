@@ -1,4 +1,5 @@
 # Discord Nuke Bot
+## made by zentonik
 
 **Warning:** This script is intended for educational purposes only. Using it maliciously is against Discord's Terms of Service and can result in severe consequences, including bans and legal action.
 
