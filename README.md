@@ -28,5 +28,5 @@ This bot requires the following Python libraries:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/discord-nuke-bot.git
+   git clone https://github.com/zentonik/discord-nuke-bot.git
    cd discord-nuke-bot
