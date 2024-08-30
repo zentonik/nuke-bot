@@ -25,7 +25,9 @@ This bot requires the following Python libraries:
 - `discord.py` for interacting with the Discord API.
 - `aiohttp` for making asynchronous HTTP requests.
 
-## Setup
+## NOTES
+- You must replace the placeholders YOUR_ICON_URL and YOUR_BOT_TOKEN in the script for it to work properly.
+- The bot requires appropriate permissions in the Discord server, such as Manage Channels, Manage Roles, Ban Members, etc.
 
 1. **Clone the Repository:**
    ```bash
